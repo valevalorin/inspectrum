@@ -4,15 +4,21 @@ using System.Collections.Generic;
 
 public class InputController : MonoBehaviour
 {
+	public int InputFrames;
+	public BlackHoleTrigger left_zone;
+	public BlackHoleTrigger right_zone;
+	public PhotonManager PM;
+
 	private bool inputActive = false;
 	private int activeInputCounter = 0;
-	private List<Color> activeColors;
-	public int inputFrames;
+	private List<InputColor> activeColors;
 
 	// Use this for initialization
 	void Start ()
 	{
-		activeColors = new List<Color>();
+		activeColors = new List<InputColor>();
+		left_zone = (BlackHoleTrigger) GameObject.FindGameObjectWithTag("left_zone").GetComponent<BlackHoleTrigger>();
+		right_zone = (BlackHoleTrigger) GameObject.FindGameObjectWithTag("right_zone").GetComponent<BlackHoleTrigger>();
 	}
 	
 	// Update is called once per frame
@@ -25,49 +31,80 @@ public class InputController : MonoBehaviour
 		if(!inputActive && (red || blue || yellow))
 		{
 			inputActive = true;
-			activeInputCounter = inputFrames;
+			activeInputCounter = InputFrames;
 		}
 
 		if(inputActive)
 		{
-			if(red && !activeColors.Contains(Color.red))
-				activeColors.Add(Color.red);
+			if(red && !activeColors.Contains(InputColor.RED))
+				activeColors.Add(InputColor.RED);
 
-			if(blue && !activeColors.Contains(Color.blue))
-				activeColors.Add(Color.blue);
+			if(blue && !activeColors.Contains(InputColor.BLUE))
+				activeColors.Add(InputColor.BLUE);
 
-			if(yellow && !activeColors.Contains(Color.yellow))
-				activeColors.Add(Color.yellow);
+			if(yellow && !activeColors.Contains(InputColor.YELLOW))
+				activeColors.Add(InputColor.YELLOW);
 		}
 		else if(activeInputCounter == 0)
 		{
-			Color input = determineColor(activeColors.Contains(Color.red), activeColors.Contains(Color.blue), activeColors.Contains(Color.yellow));
-			//Send input to blackhole
-			activeColors = new List<Color>();
+			InputColor input = determineColor(activeColors.Contains(InputColor.RED), activeColors.Contains(InputColor.BLUE), activeColors.Contains(InputColor.YELLOW));
+
+		    PhotonData currentPhoton = (PhotonData) PM.PhotonQueue.Peek();
+
+			if(left_zone.isTriggered && right_zone.isTriggered && input == currentPhoton.color)
+			{
+				//pass block, remove collider, score
+				currentPhoton.self.GetComponent<BoxCollider2D>().enabled = false;
+				PM.PhotonQueue.Dequeue();
+			}
+			else if((left_zone.isTriggered ^ right_zone.isTriggered) || input != currentPhoton.color)
+			{
+				//kill block, play error noise
+				currentPhoton.self.GetComponent<BoxCollider2D>().enabled = false;
+				PM.PhotonQueue.Dequeue();
+				Destroy(currentPhoton.self);
+			}
+
+
+			//Reset inputs
+			activeColors = new List<InputColor>();
 			inputActive = false;
 		}
-		else
+
+		if(inputActive)
 			activeInputCounter--;
 	}
 
-	private Color determineColor(bool red, bool blue, bool yellow)
+	private InputColor determineColor(bool red, bool blue, bool yellow)
 	{	
 		if(red && !(blue || yellow))
-			return Color.red;
+			return InputColor.RED;
 		else if(red && blue && !yellow)
-			return Color.purple;
+			return InputColor.PURPLE;
 		else if(red && yellow && !blue)
-			return Color.orange;
+			return InputColor.ORANGE;
 		else if(blue && !(red || yellow))
-			return Color.blue;
+			return InputColor.BLUE;
 		else if(blue && yellow && !red)
-			return Color.green;
+			return InputColor.GREEN;
 		else if(yellow && !(red || blue))
-			return Color.yellow;
+			return InputColor.YELLOW;
 		else if(red && blue && yellow)
-			return Color.black;
+			return InputColor.BLACK;
 
-		return null;
+		return InputColor.NONE;
 	}
+}
+
+public enum InputColor
+{
+	RED,
+	BLUE,
+	YELLOW,
+	PURPLE,
+	ORANGE,
+	GREEN,
+	BLACK,
+	NONE
 }
 
