@@ -3,10 +3,10 @@ using System;
 using System.Collections.Generic;
 
 public class PhotonManager : MonoBehaviour {
-
+	public GameManager GM;
 	public Queue<PhotonData> PhotonQueue;
-	public int BPS;
 
+	private float BPS;
 	private System.Random rng;
 	private float generationCooldown;
 
@@ -14,6 +14,7 @@ public class PhotonManager : MonoBehaviour {
 	void Start () {
 		rng = new System.Random();
 		PhotonQueue = new Queue<PhotonData>();
+		BPS = GM.BPM/60;
 		setCooldown();
 	}
 	
@@ -54,6 +55,6 @@ public class PhotonManager : MonoBehaviour {
 		else if(num > 0.74f && num <= 0.87f)
 			return new PhotonData(InputColor.GREEN, Instantiate(Green));
 		else
-			return new PhotonData(InputColor.Orange, Instantiate(Orange));
+			return new PhotonData(InputColor.ORANGE, Instantiate(Orange));
 	}
 }

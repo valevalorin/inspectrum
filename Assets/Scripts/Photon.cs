@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class Photon : MonoBehaviour {
-	public GameManger GM;
+	public GameManager GM;
 
 
 	// Use this for initialization
