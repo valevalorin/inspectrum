@@ -6,6 +6,13 @@ public class PhotonManager : MonoBehaviour {
 	public GameManager GM;
 	public Queue<PhotonData> PhotonQueue;
 
+	public GameObject Red;
+	public GameObject Blue;
+	public GameObject Yellow;
+	public GameObject Purple;
+	public GameObject Green;
+	public GameObject Orange;
+
 	private float BPS;
 	private System.Random rng;
 	private float generationCooldown;
@@ -45,16 +52,16 @@ public class PhotonManager : MonoBehaviour {
 		float num = rng.Next();
 		 
 		if(num > 0.0f && num <= 0.2f)
-			return new PhotonData(InputColor.RED, Instantiate(Red));
+			return new PhotonData(InputColor.RED, (GameObject) Instantiate(Red));
 		else if(num > 0.2f && num <= 0.4f)
-			return new PhotonData(InputColor.BLUE, Instantiate(Blue));
+			return new PhotonData(InputColor.BLUE, (GameObject) Instantiate(Blue));
 		else if(num > 0.4f && num <= 0.6f)
-			return new PhotonData(InputColor.YELLOW, Instantiate(Yellow));
+			return new PhotonData(InputColor.YELLOW, (GameObject) Instantiate(Yellow));
 		else if(num > 0.6f && num <= 0.74f)
-			return new PhotonData(InputColor.PURPLE, Instantiate(Purple));
+			return new PhotonData(InputColor.PURPLE, (GameObject) Instantiate(Purple));
 		else if(num > 0.74f && num <= 0.87f)
-			return new PhotonData(InputColor.GREEN, Instantiate(Green));
+			return new PhotonData(InputColor.GREEN, (GameObject) Instantiate(Green));
 		else
-			return new PhotonData(InputColor.ORANGE, Instantiate(Orange));
+			return new PhotonData(InputColor.ORANGE, (GameObject) Instantiate(Orange));
 	}
 }
