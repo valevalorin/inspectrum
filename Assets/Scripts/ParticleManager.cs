@@ -4,7 +4,6 @@ using System.Collections;
 public class ParticleManager : MonoBehaviour {
 
 	public float trackSpeed;
-	public float lifeTime;
 	
 	public ParticleSystem nearSystem;
 	public ParticleSystem midSystem;
