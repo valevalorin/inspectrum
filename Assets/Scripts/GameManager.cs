@@ -4,7 +4,7 @@ using System.Collections;
 public class GameManager : MonoBehaviour {
 
 	public float BPM;
-	public Vector2 PhotonSpeed;
+	public float PhotonSpeed;
 	public AudioClip song;
 	public bool SongFinished = false;
 
@@ -21,11 +21,11 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		PhotonSpeed = new Vector2(-1 * (10/(1/BPM)), 0);
+		PhotonSpeed = (-20f / (1f / BPM))/4;
 		songPlayer = (AudioSource) gameObject.GetComponent<AudioSource>();
 		songPlayer.clip = song;
 		songPlayer.Play();
-		GameObject.FindGameObjectWithTag("photon_manager").GetComponent<PhotonManager>().enabled = true;
+		GameObject.FindGameObjectWithTag("PhotonManager").GetComponent<PhotonManager>().enabled = true;
 		//Enable Other Components
 	}
 

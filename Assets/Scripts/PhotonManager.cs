@@ -32,6 +32,7 @@ public class PhotonManager : MonoBehaviour {
 		if(generationCooldown <= 0.0f)
 		{
 			PhotonQueue.Enqueue(generatePhoton());
+			setCooldown();
 		}
 
 	}
@@ -49,19 +50,19 @@ public class PhotonManager : MonoBehaviour {
 
 	PhotonData generatePhoton()
 	{
-		float num = rng.Next();
+		float num = UnityEngine.Random.value;
 		 
 		if(num > 0.0f && num <= 0.2f)
-			return new PhotonData(InputColor.RED, (GameObject) Instantiate(Red));
+			return new PhotonData(InputColor.RED, (GameObject) Instantiate(Red, this.transform.position, Quaternion.identity));
 		else if(num > 0.2f && num <= 0.4f)
-			return new PhotonData(InputColor.BLUE, (GameObject) Instantiate(Blue));
+			return new PhotonData(InputColor.BLUE, (GameObject) Instantiate(Blue, this.transform.position, Quaternion.identity));
 		else if(num > 0.4f && num <= 0.6f)
-			return new PhotonData(InputColor.YELLOW, (GameObject) Instantiate(Yellow));
+			return new PhotonData(InputColor.YELLOW, (GameObject) Instantiate(Yellow, this.transform.position, Quaternion.identity));
 		else if(num > 0.6f && num <= 0.74f)
-			return new PhotonData(InputColor.PURPLE, (GameObject) Instantiate(Purple));
+			return new PhotonData(InputColor.PURPLE, (GameObject) Instantiate(Purple, this.transform.position,Quaternion.identity));
 		else if(num > 0.74f && num <= 0.87f)
-			return new PhotonData(InputColor.GREEN, (GameObject) Instantiate(Green));
+			return new PhotonData(InputColor.GREEN, (GameObject) Instantiate(Green, this.transform.position,Quaternion.identity));
 		else
-			return new PhotonData(InputColor.ORANGE, (GameObject) Instantiate(Orange));
+			return new PhotonData(InputColor.ORANGE, (GameObject) Instantiate(Orange, this.transform.position,Quaternion.identity));
 	}
 }

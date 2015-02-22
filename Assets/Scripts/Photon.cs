@@ -2,15 +2,20 @@
 using System.Collections;
 
 public class Photon : MonoBehaviour {
-	public GameManager GM;
+	private GameManager GM;
 
 	//DELETE this constant later, just for testing photon to move left/right
-	const float SPEED = 100;
+	public float SPEED = 100;
+
+	void Awake(){
+		GM = GameObject.Find("GameManager").GetComponent<GameManager>();
+	}
 
 	// Use this for initialization
 	void Start () {
-		//rigidbody2D.velocity = GM.PhotonSpeed;
-		rigidbody2D.AddForce (Vector3.left * SPEED);
+//		rigidbody2D.velocity = GM.PhotonSpeed;
+		rigidbody2D.AddForce (new Vector2(GM.PhotonSpeed, 0f));
+		Debug.Log (GM.PhotonSpeed.ToString ());
 	}
 	
 	// Update is called once per frame
