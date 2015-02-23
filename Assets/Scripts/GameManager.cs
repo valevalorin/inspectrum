@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour {
 	private int streakCount = 0;
 	private Text scoreText;
 	private Text[] multiplierText;
+	private Text streakText;
 	public GameData data;
 
 	void Awake(){
@@ -20,8 +21,12 @@ public class GameManager : MonoBehaviour {
 		data.multiplier = 1;
 
 		GameObject.Find ("song_title").GetComponent<Text> ().text = data.selectedSong.title;
+		GameObject.Find ("bpm").GetComponent<Text> ().text = string.Format("{0}",data.selectedSong.bpm);
 		scoreText = GameObject.Find ("score").GetComponent<Text> ();
 		multiplierText = GameObject.Find ("multiplier").GetComponentsInChildren<Text>();
+		streakText = GameObject.Find ("hit_counter").GetComponent<Text> ();
+
+		multiplierText [2].color = Color.red;
 	}
 
 	// Use this for initialization
@@ -36,15 +41,20 @@ public class GameManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		scoreText.text = string.Format("{0:0000000}", data.score);
+		data.score++;
 		streakCount++;
+		UpdateMultText();
+		UpdateScoreText ();
+		UpdateStreakText ();
 		Score ();
-		UpdateMultUI (data.multiplier);
+		if (Input.GetKeyDown(KeyCode.Space)) {
+			Debug.Log (string.Format("Score:{0}, Multi: x{1}, Streak:{2}", data.score, data.multiplier, streakCount));
+		}
 	}
 
 	public void Score(){
 		streakCount++;
-		if(streakCount % 10 == 0 && streakCount <= 40){
+		if(streakCount % 10 == 0 && streakCount <= 40 && data.multiplier < 4){
 			data.multiplier++;
 		}
 		data.score += PHOTON_VALUE_SCORE * data.multiplier;
@@ -55,10 +65,22 @@ public class GameManager : MonoBehaviour {
 		data.multiplier = 1;
 	}
 
-	void UpdateMultUI(int multi){
+	void UpdateMultText(){
+		resetMultText ();
+		multiplierText [data.multiplier - 1].color = Color.red;
+	}
+
+	void resetMultText(){
 		foreach(Text txt in multiplierText){
 			txt.color = Color.white;
 		}
-		multiplierText [multi - 1].color = Color.red;
+	}
+
+	void UpdateStreakText(){
+		streakText.text = string.Format ("x{0:0000}", streakCount);
+	}
+
+	void UpdateScoreText(){
+		scoreText.text = string.Format("{0:0000000}", data.score);
 	}
 }
