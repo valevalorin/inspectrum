@@ -65,6 +65,8 @@ public class InputController : MonoBehaviour
 				GM.Score();
 				currentPhoton.self.GetComponent<BoxCollider2D>().enabled = false;
 				PM.PhotonQueue.Dequeue();
+				left_zone.isTriggered = false;
+				right_zone.isTriggered = false;
 
 			}
 			else if(left_zone.isTriggered ^ right_zone.isTriggered || (left_zone.isTriggered && right_zone.isTriggered && input != currentPhoton.color))
@@ -74,6 +76,8 @@ public class InputController : MonoBehaviour
 				currentPhoton.self.GetComponent<BoxCollider2D>().enabled = false;
 				PM.PhotonQueue.Dequeue();
 				Destroy(currentPhoton.self);
+				left_zone.isTriggered = false;
+				right_zone.isTriggered = false;
 
 			}
 
