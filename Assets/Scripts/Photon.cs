@@ -15,7 +15,6 @@ public class Photon : MonoBehaviour {
 	void Start () {
 //		rigidbody2D.velocity = GM.PhotonSpeed;
 		rigidbody2D.AddForce (new Vector2(GM.PhotonSpeed, 0f));
-		Debug.Log (GM.PhotonSpeed.ToString ());
 	}
 	
 	// Update is called once per frame

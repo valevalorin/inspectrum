@@ -18,8 +18,8 @@ public class InputController : MonoBehaviour
 	void Start ()
 	{
 		activeColors = new List<InputColor>();
-		PM = (PhotonManager) GameObject.FindGameObjectWithTag("photon_manager").GetComponent<PhotonManager>();
-		GM = (GameManager) GameObject.FindGameObjectWithTag("game_manager").GetComponent<GameManager>();
+		PM = (PhotonManager) GameObject.FindGameObjectWithTag("PhotonManager").GetComponent<PhotonManager>();
+		GM = (GameManager) GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
 		left_zone = (BlackHoleTrigger) GameObject.FindGameObjectWithTag("left_zone").GetComponent<BlackHoleTrigger>();
 		right_zone = (BlackHoleTrigger) GameObject.FindGameObjectWithTag("right_zone").GetComponent<BlackHoleTrigger>();
 	}
@@ -33,6 +33,7 @@ public class InputController : MonoBehaviour
 
 		if(!inputActive && (red || blue || yellow))
 		{
+			Debug.Log ("Now Active");
 			inputActive = true;
 			activeInputCounter = InputFrames;
 		}
@@ -48,24 +49,32 @@ public class InputController : MonoBehaviour
 			if(yellow && !activeColors.Contains(InputColor.YELLOW))
 				activeColors.Add(InputColor.YELLOW);
 		}
-		else if(activeInputCounter == 0)
+
+		if(inputActive && activeInputCounter == 0)
 		{
+			Debug.Log ("Active!");
 			InputColor input = determineColor(activeColors.Contains(InputColor.RED), activeColors.Contains(InputColor.BLUE), activeColors.Contains(InputColor.YELLOW));
 
 		    PhotonData currentPhoton = (PhotonData) PM.PhotonQueue.Peek();
 
+			Debug.Log (input == currentPhoton.color);
+
 			if(left_zone.isTriggered && right_zone.isTriggered && input == currentPhoton.color)
 			{
+				Debug.Log ("HIT!");
 				GM.Score();
 				currentPhoton.self.GetComponent<BoxCollider2D>().enabled = false;
 				PM.PhotonQueue.Dequeue();
+
 			}
-			else if((left_zone.isTriggered ^ right_zone.isTriggered) || input != currentPhoton.color)
+			else if(left_zone.isTriggered ^ right_zone.isTriggered || (left_zone.isTriggered && right_zone.isTriggered && input != currentPhoton.color))
 			{
+				Debug.Log ("MISS!: "+left_zone.isTriggered+":"+right_zone.isTriggered);
 				GM.Miss();
 				currentPhoton.self.GetComponent<BoxCollider2D>().enabled = false;
 				PM.PhotonQueue.Dequeue();
 				Destroy(currentPhoton.self);
+
 			}
 
 
