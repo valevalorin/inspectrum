@@ -24,7 +24,7 @@ public class MenuManager : MonoBehaviour {
 	public void StartGame(){
 		GameData data = GameObject.Find ("GameData").GetComponent<GameData> ();
 		Toggle active = GameObject.Find ("song_list").GetComponent<ToggleGroup> ().ActiveToggles ().FirstOrDefault ();
-		data._audio = active.GetComponent<AudioSource> ().clip;
+		data.selectedSong = active.GetComponent<SongData> ();
 		Application.LoadLevel (Application.loadedLevel + 1);
 	}
 

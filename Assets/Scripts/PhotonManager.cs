@@ -21,7 +21,7 @@ public class PhotonManager : MonoBehaviour {
 	void Start () {
 		rng = new System.Random();
 		PhotonQueue = new Queue<PhotonData>();
-		BPS = GM.BPM/60;
+		BPS = GM.data.selectedSong.bpm/60;
 		setCooldown();
 	}
 	

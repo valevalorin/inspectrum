@@ -4,8 +4,7 @@ using System.Collections;
 public class DestroyPhoton : MonoBehaviour {
 	public PhotonManager PM;
 
-	void Start()
-	{
+	void Start(){
 		PM = (PhotonManager)GameObject.FindGameObjectWithTag ("PhotonManager").GetComponent<PhotonManager>();
 	}
 

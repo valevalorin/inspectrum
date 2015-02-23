@@ -1,29 +1,34 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GameManager : MonoBehaviour {
+using UnityEngine.UI;
 
-	public float BPM;
+public class GameManager : MonoBehaviour {
+	const int PHOTON_VALUE_SCORE = 1;
+
 	public float PhotonSpeed;
-	public AudioClip song;
 	public bool SongFinished = false;
 
-	public int PlayerScore = 0;
-	public int Multiplier = 1;
-
-	private AudioSource songPlayer;
 	private int streakCount = 0;
+	private Text scoreText;
+	private Text[] multiplierText;
+	public GameData data;
 
 	void Awake(){
-		GameData data = GameObject.Find ("GameData").GetComponent<GameData> ();
-		song = data._audio;
+		data = GameObject.Find ("GameData").GetComponent<GameData> ();
+		data.score = 0;
+		data.multiplier = 1;
+
+		GameObject.Find ("song_title").GetComponent<Text> ().text = data.selectedSong.title;
+		scoreText = GameObject.Find ("score").GetComponent<Text> ();
+		multiplierText = GameObject.Find ("multiplier").GetComponentsInChildren<Text>();
 	}
 
 	// Use this for initialization
 	void Start () {
-		PhotonSpeed = (-20f / (1f / BPM))/4;
-		songPlayer = (AudioSource) gameObject.GetComponent<AudioSource>();
-		songPlayer.clip = song;
+		PhotonSpeed = (-20f / (1f / data.selectedSong.bpm))/4;
+		AudioSource songPlayer = (AudioSource) gameObject.GetComponent<AudioSource>();
+		songPlayer.clip = data.selectedSong.song;
 		songPlayer.Play();
 		GameObject.FindGameObjectWithTag("PhotonManager").GetComponent<PhotonManager>().enabled = true;
 		//Enable Other Components
@@ -31,22 +36,29 @@ public class GameManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-
-	}
-
-	public void Score()
-	{
+		scoreText.text = string.Format("{0:0000000}", data.score);
 		streakCount++;
-		if(streakCount % 10 == 0 && streakCount <= 40)
-		{
-			Multiplier++;
-		}
-		PlayerScore += 100 * Multiplier;
+		Score ();
+		UpdateMultUI (data.multiplier);
 	}
 
-	public void Miss()
-	{
+	public void Score(){
+		streakCount++;
+		if(streakCount % 10 == 0 && streakCount <= 40){
+			data.multiplier++;
+		}
+		data.score += PHOTON_VALUE_SCORE * data.multiplier;
+	}
+
+	public void Miss(){
 		streakCount = 0;
-		Multiplier = 1;
+		data.multiplier = 1;
+	}
+
+	void UpdateMultUI(int multi){
+		foreach(Text txt in multiplierText){
+			txt.color = Color.white;
+		}
+		multiplierText [multi - 1].color = Color.red;
 	}
 }
