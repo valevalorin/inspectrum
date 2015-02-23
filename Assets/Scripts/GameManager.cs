@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		PhotonSpeed = (-20f / (1f / data.selectedSong.bpm))/4;
+		PhotonSpeed = (-17.62945f / (1f / data.selectedSong.bpm))/4;
 		AudioSource songPlayer = (AudioSource) gameObject.GetComponent<AudioSource>();
 		songPlayer.clip = data.selectedSong.song;
 		songPlayer.Play();
