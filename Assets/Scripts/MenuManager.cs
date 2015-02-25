@@ -23,7 +23,7 @@ public class MenuManager : MonoBehaviour {
 
 	public void StartGame(){
 		GameData data = GameObject.Find ("GameData").GetComponent<GameData> ();
-		Toggle active = GameObject.Find ("song_list").GetComponent<ToggleGroup> ().ActiveToggles ().FirstOrDefault ();
+		Toggle active = GameObject.Find ("SongList").GetComponent<ToggleGroup> ().ActiveToggles ().FirstOrDefault ();
 		data.selectedSong = active.GetComponent<SongData> ();
 		Application.LoadLevel (Application.loadedLevel + 1);
 	}

@@ -10,7 +10,6 @@ public class Photon : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-//		rigidbody2D.velocity = GM.PhotonSpeed;
 		rigidbody2D.AddForce (new Vector2(GM.PhotonSpeed, 0f));
 	}
 	
