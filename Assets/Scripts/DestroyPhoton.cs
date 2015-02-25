@@ -9,7 +9,6 @@ public class DestroyPhoton : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D coll){
-		PM.PhotonQueue.Dequeue ();
 		Destroy(coll.gameObject);
 	}
 }

@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		PhotonSpeed = (-17.62945f / (1f / data.selectedSong.bpm))/4;
+		PhotonSpeed = (-16.07f / (1f / data.selectedSong.bpm))/4;
 		AudioSource songPlayer = (AudioSource) gameObject.GetComponent<AudioSource>();
 		songPlayer.clip = data.selectedSong.song;
 		songPlayer.Play();
@@ -41,12 +41,9 @@ public class GameManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		data.score++;
-		streakCount++;
 		UpdateMultText();
 		UpdateScoreText ();
 		UpdateStreakText ();
-		Score ();
 		if (Input.GetKeyDown(KeyCode.Space)) {
 			Debug.Log (string.Format("Score:{0}, Multi: x{1}, Streak:{2}", data.score, data.multiplier, streakCount));
 		}

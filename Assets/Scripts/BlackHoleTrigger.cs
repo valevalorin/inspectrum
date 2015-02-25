@@ -17,11 +17,13 @@ public class BlackHoleTrigger : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D other)
 	{
-		isTriggered = true;
+		if(!other.gameObject.CompareTag("DeadPhoton"))
+			isTriggered = true;
 	}
 
 	void OnTriggerExit2D(Collider2D other)
 	{
-		isTriggered = false;
+		if(!other.gameObject.CompareTag("DeadPhoton"))
+			isTriggered = false;
 	}
 }

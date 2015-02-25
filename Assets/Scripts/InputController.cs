@@ -33,7 +33,6 @@ public class InputController : MonoBehaviour
 
 		if(!inputActive && (red || blue || yellow))
 		{
-			Debug.Log ("Now Active");
 			inputActive = true;
 			activeInputCounter = InputFrames;
 		}
@@ -50,20 +49,18 @@ public class InputController : MonoBehaviour
 				activeColors.Add(InputColor.YELLOW);
 		}
 
-		if(inputActive && activeInputCounter == 0)
+		if(inputActive && activeInputCounter == 0 && PM.PhotonQueue.Count > 0)
 		{
-			Debug.Log ("Active!");
 			InputColor input = determineColor(activeColors.Contains(InputColor.RED), activeColors.Contains(InputColor.BLUE), activeColors.Contains(InputColor.YELLOW));
 
 		    PhotonData currentPhoton = (PhotonData) PM.PhotonQueue.Peek();
-
-			Debug.Log (input == currentPhoton.color);
 
 			if(left_zone.isTriggered && right_zone.isTriggered && input == currentPhoton.color)
 			{
 				Debug.Log ("HIT!");
 				GM.Score();
 				currentPhoton.self.GetComponent<BoxCollider2D>().enabled = false;
+				currentPhoton.self.gameObject.rigidbody2D.AddForce(new Vector2 (0f, RandomUpOrDown() * GM.PhotonSpeed));
 				PM.PhotonQueue.Dequeue();
 				left_zone.isTriggered = false;
 				right_zone.isTriggered = false;
@@ -72,10 +69,9 @@ public class InputController : MonoBehaviour
 			else if(left_zone.isTriggered ^ right_zone.isTriggered || (left_zone.isTriggered && right_zone.isTriggered && input != currentPhoton.color))
 			{
 				Debug.Log ("MISS!: "+left_zone.isTriggered+":"+right_zone.isTriggered);
+				currentPhoton.self.tag = "DeadPhoton";
 				GM.Miss();
-				currentPhoton.self.GetComponent<BoxCollider2D>().enabled = false;
 				PM.PhotonQueue.Dequeue();
-				Destroy(currentPhoton.self);
 				left_zone.isTriggered = false;
 				right_zone.isTriggered = false;
 
@@ -109,6 +105,15 @@ public class InputController : MonoBehaviour
 			return InputColor.BLACK;
 
 		return InputColor.NONE;
+	}
+
+	public float RandomUpOrDown()
+	{
+		float num = UnityEngine.Random.value;
+		if(num >= 0.5f)
+			return 1f;
+		else
+			return -1f;
 	}
 }
 

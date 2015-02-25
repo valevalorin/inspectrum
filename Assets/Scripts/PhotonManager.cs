@@ -19,7 +19,6 @@ public class PhotonManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		rng = new System.Random();
 		PhotonQueue = new Queue<PhotonData>();
 		BPS = GM.data.selectedSong.bpm/60;
 		setCooldown();
@@ -39,7 +38,7 @@ public class PhotonManager : MonoBehaviour {
 
 	void setCooldown()
 	{
-		float num = rng.Next();
+		float num = UnityEngine.Random.value;
 		if(num > 0.0f && num <= 0.7f)
 			generationCooldown = 1/BPS;
 		else if(num > 0.7f && num < 0.9f)
