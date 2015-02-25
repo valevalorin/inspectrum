@@ -4,9 +4,6 @@ using System.Collections;
 public class Photon : MonoBehaviour {
 	private GameManager GM;
 
-	//DELETE this constant later, just for testing photon to move left/right
-	public float SPEED = 100;
-
 	void Awake(){
 		GM = GameObject.Find("GameManager").GetComponent<GameManager>();
 	}
