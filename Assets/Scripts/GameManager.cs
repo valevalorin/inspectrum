@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 	const int PHOTON_VALUE_SCORE = 1;
+	const string EMPTY_STRING = "";
 
 	public float PhotonSpeed;
 	public bool SongFinished = false;
@@ -31,7 +32,7 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		PhotonSpeed = (-16.07f / (1f / data.selectedSong.bpm))/8;
+		PhotonSpeed = (-16.07f / (1f / data.selectedSong.bpm))/4;
 		AudioSource songPlayer = (AudioSource) gameObject.GetComponent<AudioSource>();
 		songPlayer.clip = data.selectedSong.song;
 		songPlayer.Play();
@@ -41,12 +42,9 @@ public class GameManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		UpdateMultText();
-		UpdateScoreText ();
 		UpdateStreakText ();
-		if (Input.GetKeyDown(KeyCode.Space)) {
-			Debug.Log (string.Format("Score:{0}, Multi: x{1}, Streak:{2}", data.score, data.multiplier, streakCount));
-		}
+		UpdateScoreText ();
+		UpdateMultText();
 	}
 
 	public void Score(){
@@ -74,7 +72,11 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void UpdateStreakText(){
-		streakText.text = string.Format ("x{0:0000}", streakCount);
+		if (streakCount > 5){
+			streakText.text = string.Format ("x{0:0000}", streakCount);
+		}else{
+			streakText.text = "";
+		}
 	}
 
 	void UpdateScoreText(){
