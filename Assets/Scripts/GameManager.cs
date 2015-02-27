@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour {
 
 	public float PhotonSpeed;
 	public bool SongFinished = false;
+	public float shutdownTimer;
 
 	private int streakCount = 0;
 	private Text scoreText;
@@ -38,6 +39,7 @@ public class GameManager : MonoBehaviour {
 		songPlayer.Play();
 		GameObject.FindGameObjectWithTag("PhotonManager").GetComponent<PhotonManager>().enabled = true;
 		//Enable Other Components
+		shutdownTimer = 12.5/PhotonSpeed;
 	}
 
 	// Update is called once per frame
