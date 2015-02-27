@@ -9,6 +9,7 @@ public class InputController : MonoBehaviour
 	public BlackHoleTrigger right_zone;
 	public PhotonManager PM;
 	public GameManager GM;
+	public bool isPaused = false;
 
 	private bool inputActive = false;
 	private int activeInputCounter = 0;
@@ -20,16 +21,38 @@ public class InputController : MonoBehaviour
 		activeColors = new List<InputColor>();
 		PM = (PhotonManager) GameObject.FindGameObjectWithTag("PhotonManager").GetComponent<PhotonManager>();
 		GM = (GameManager) GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
-		left_zone = (BlackHoleTrigger) GameObject.FindGameObjectWithTag("left_zone").GetComponent<BlackHoleTrigger>();
-		right_zone = (BlackHoleTrigger) GameObject.FindGameObjectWithTag("right_zone").GetComponent<BlackHoleTrigger>();
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
+		if(Input.GetKeyDown(KeyCode.Escape))
+		{
+			isPaused = !isPaused;
+		}
+
 		bool red = Input.GetKeyDown(KeyCode.A);
 		bool blue = Input.GetKeyDown(KeyCode.S);
 		bool yellow = Input.GetKeyDown(KeyCode.D);
+		float distance;
+		PhotonData currentPhoton;
+
+		if(PM.PhotonQueue.Count > 0)
+		{
+			currentPhoton = (PhotonData) PM.PhotonQueue.Peek();
+			distance = Vector3.Distance(currentPhoton.self.transform.position, PM.transform.position);
+		}
+		else
+			return;
+
+
+		if(distance > 14.5f)
+		{
+			Debug.Log ("MISS!: "+distance);
+			currentPhoton.self.tag = "DeadPhoton";
+			GM.Miss();
+			PM.PhotonQueue.Dequeue();
+		}
 
 		if(!inputActive && (red || blue || yellow))
 		{
@@ -49,32 +72,25 @@ public class InputController : MonoBehaviour
 				activeColors.Add(InputColor.YELLOW);
 		}
 
-		if(inputActive && activeInputCounter == 0 && PM.PhotonQueue.Count > 0)
+		if(inputActive && activeInputCounter == 0)
 		{
 			InputColor input = determineColor(activeColors.Contains(InputColor.RED), activeColors.Contains(InputColor.BLUE), activeColors.Contains(InputColor.YELLOW));
 
-		    PhotonData currentPhoton = (PhotonData) PM.PhotonQueue.Peek();
-
-			if(left_zone.isTriggered && right_zone.isTriggered && input == currentPhoton.color)
+			if(distance > 13.4f && distance <= 14.5f && input == currentPhoton.color)
 			{
 				Debug.Log ("HIT!");
 				GM.Score();
 				currentPhoton.self.GetComponent<BoxCollider2D>().enabled = false;
 				currentPhoton.self.gameObject.rigidbody2D.AddForce(new Vector2 (0f, RandomUpOrDown() * GM.PhotonSpeed));
 				PM.PhotonQueue.Dequeue();
-				left_zone.isTriggered = false;
-				right_zone.isTriggered = false;
 
 			}
-			else if(left_zone.isTriggered ^ right_zone.isTriggered || (left_zone.isTriggered && right_zone.isTriggered && input != currentPhoton.color))
+			else if((distance < 13.4f && distance > 12.4f) || (distance > 13.4f && distance <= 14.5f && input != currentPhoton.color))
 			{
-				Debug.Log ("MISS!: "+left_zone.isTriggered+":"+right_zone.isTriggered);
+				Debug.Log ("MISS!: "+distance);
 				currentPhoton.self.tag = "DeadPhoton";
 				GM.Miss();
 				PM.PhotonQueue.Dequeue();
-				left_zone.isTriggered = false;
-				right_zone.isTriggered = false;
-
 			}
 
 
