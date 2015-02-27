@@ -39,9 +39,9 @@ public class PhotonManager : MonoBehaviour {
 	void setCooldown()
 	{
 		float num = UnityEngine.Random.value;
-		if(num > 0.0f && num <= 0.7f)
+		if(num > 0.0f && num <= 0.3f)
 			generationCooldown = 1/BPS;
-		else if(num > 0.7f && num < 0.9f)
+		else if(num > 0.3f && num < 0.45f)
 			generationCooldown = 0.5f/BPS;
 		else 
 			generationCooldown = 2/BPS;
