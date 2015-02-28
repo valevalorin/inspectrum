@@ -5,7 +5,7 @@ public class BlackHole : MonoBehaviour {
 	Vector2 ZERO_VELOCITY = new Vector2 (0.0f, 0.0f);
 	const float DECREASING_VALUE = 0.1f;
 	const float WAIT_TIME = 0f;
-	
+
 	void OnTriggerStay2D(Collider2D other){
 		if(other.gameObject.transform.position.x <= this.gameObject.transform.position.x){
 			other.gameObject.rigidbody2D.velocity = ZERO_VELOCITY;
@@ -21,6 +21,7 @@ public class BlackHole : MonoBehaviour {
 				new Vector3(obj.localScale.x-i, obj.localScale.y-i);
 			yield return new WaitForSeconds(WAIT_TIME);
 		}
-		Destroy(obj.gameObject);
+		if(obj != null)
+			Destroy(obj.gameObject);
 	}
 }
