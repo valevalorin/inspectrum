@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour {
 		songPlayer.Play();
 		GameObject.FindGameObjectWithTag("PhotonManager").GetComponent<PhotonManager>().enabled = true;
 		//Enable Other Components
-		shutdownTimer = 12.5/PhotonSpeed;
+		shutdownTimer = 12.5f/PhotonSpeed;
 	}
 
 	// Update is called once per frame
