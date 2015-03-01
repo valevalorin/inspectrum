@@ -11,6 +11,9 @@ public class InputController : MonoBehaviour
 	public GameManager GM;
 	public bool isPaused = false;
 
+	public float entryZoneEnd;
+	public float entryZoneBegin;
+
 	private bool inputActive = false;
 	private int activeInputCounter = 0;
 	private List<InputColor> activeColors;
@@ -46,7 +49,7 @@ public class InputController : MonoBehaviour
 			return;
 
 
-		if(distance > 14.5f)
+		if(distance > entryZoneEnd)
 		{
 			Debug.Log ("MISS!: "+distance);
 			currentPhoton.self.tag = "DeadPhoton";
@@ -76,16 +79,16 @@ public class InputController : MonoBehaviour
 		{
 			InputColor input = determineColor(activeColors.Contains(InputColor.RED), activeColors.Contains(InputColor.BLUE), activeColors.Contains(InputColor.YELLOW));
 
-			if(distance > 13.4f && distance <= 14.5f && input == currentPhoton.color)
+			if(distance > entryZoneBegin && distance <= entryZoneEnd && input == currentPhoton.color)
 			{
 				Debug.Log ("HIT!");
 				GM.Score();
 				currentPhoton.self.GetComponent<BoxCollider2D>().enabled = false;
-				currentPhoton.self.gameObject.rigidbody2D.AddForce(new Vector2 (0f, RandomUpOrDown() * GM.PhotonSpeed));
+				currentPhoton.self.gameObject.rigidbody2D.velocity = new Vector2 (GM.PhotonSpeed, RandomUpOrDown() * GM.PhotonSpeed);
 				PM.PhotonQueue.Dequeue();
 
 			}
-			else if((distance < 13.4f && distance > 12.4f) || (distance > 13.4f && distance <= 14.5f && input != currentPhoton.color))
+			else if((distance < entryZoneBegin && distance > (entryZoneBegin - 1.3)) || (distance > entryZoneBegin && distance <= entryZoneEnd && input != currentPhoton.color))
 			{
 				Debug.Log ("MISS!: "+distance);
 				currentPhoton.self.tag = "DeadPhoton";

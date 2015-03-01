@@ -13,6 +13,9 @@ public class PhotonManager : MonoBehaviour {
 	public GameObject Green;
 	public GameObject Orange;
 
+	private bool triplet = false;
+	private int tripCount = 0;
+
 	private float BPS;
 	private System.Random rng;
 	private float generationCooldown;
@@ -25,7 +28,7 @@ public class PhotonManager : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 		generationCooldown -= Time.deltaTime;
 
 		if(generationCooldown <= 0.0f)
@@ -38,11 +41,27 @@ public class PhotonManager : MonoBehaviour {
 
 	void setCooldown()
 	{
+		if(triplet)
+		{
+			generationCooldown = 0.5f/BPS;
+			tripCount++;
+
+			if(tripCount == 2)
+			{
+				triplet = false;
+				tripCount = 0;
+			}
+			return;
+		}
+
 		float num = UnityEngine.Random.value;
 		if(num > 0.0f && num <= 0.3f)
-			generationCooldown = 1/BPS;
+			generationCooldown = 1f/BPS;
 		else if(num > 0.3f && num < 0.45f)
-			generationCooldown = 0.5f/BPS;
+		{
+			generationCooldown = 1f/BPS;
+			triplet = true;
+		}
 		else 
 			generationCooldown = 2/BPS;
 	}

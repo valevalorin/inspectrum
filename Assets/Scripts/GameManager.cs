@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour {
 	public bool SongFinished = false;
 	public float shutdownTimer;
 	private float remainingSongTime;
+	private float timeToStart;
 
 	private int streakCount = 0;
 	private Text scoreText;
@@ -34,14 +35,14 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		PhotonSpeed = (-12.5f / (1f / data.selectedSong.bpm))/4;
+		PhotonSpeed = -13.64f;//(-15.5f / (1f / data.selectedSong.bpm))/256;
 		AudioSource songPlayer = (AudioSource) gameObject.GetComponent<AudioSource>();
 		songPlayer.clip = data.selectedSong.song;
 		remainingSongTime = songPlayer.clip.length;
 		songPlayer.Play();
-		GameObject.FindGameObjectWithTag("PhotonManager").GetComponent<PhotonManager>().enabled = true;
+
 		//Enable Other Components
-		shutdownTimer = 12.5f/PhotonSpeed;
+		shutdownTimer = 13.64f/PhotonSpeed;
 	}
 
 	// Update is called once per frame
@@ -51,6 +52,8 @@ public class GameManager : MonoBehaviour {
 		UpdateMultText();
 
 		remainingSongTime -= Time.deltaTime;
+		if(remainingSongTime <= data.selectedSong.audio_length - data.selectedSong.offset)
+			GameObject.FindGameObjectWithTag("PhotonManager").GetComponent<PhotonManager>().enabled = true;
 		if(remainingSongTime <= shutdownTimer)
 			GameObject.FindGameObjectWithTag("PhotonManager").GetComponent<PhotonManager>().enabled = false;
 	}
