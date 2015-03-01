@@ -9,7 +9,6 @@ public class InputController : MonoBehaviour
 	public BlackHoleTrigger right_zone;
 	public PhotonManager PM;
 	public GameManager GM;
-	public bool isPaused = false;
 
 	public float entryZoneEnd;
 	public float entryZoneBegin;
@@ -31,7 +30,7 @@ public class InputController : MonoBehaviour
 	{
 		if(Input.GetKeyDown(KeyCode.Escape))
 		{
-			isPaused = !isPaused;
+			GM.IsPaused = !GM.IsPaused;
 		}
 
 		bool red = Input.GetKeyDown(KeyCode.A);
@@ -83,7 +82,6 @@ public class InputController : MonoBehaviour
 			{
 				Debug.Log ("HIT!");
 				GM.Score();
-				currentPhoton.self.GetComponent<BoxCollider2D>().enabled = false;
 				currentPhoton.self.gameObject.rigidbody2D.velocity = new Vector2 (GM.PhotonSpeed, RandomUpOrDown() * GM.PhotonSpeed);
 				PM.PhotonQueue.Dequeue();
 

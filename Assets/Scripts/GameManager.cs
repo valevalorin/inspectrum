@@ -17,7 +17,11 @@ public class GameManager : MonoBehaviour {
 	private Text scoreText;
 	private Text[] multiplierText;
 	private Text streakText;
+
 	public GameData data;
+	
+	public bool IsPaused = false;
+	public GameObject PauseScreen;
 
 	void Awake(){
 		data = GameObject.Find ("GameData").GetComponent<GameData> ();
@@ -35,14 +39,14 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		PhotonSpeed = -13.64f;//(-15.5f / (1f / data.selectedSong.bpm))/256;
+		PhotonSpeed = -13.64f/2;//(-15.5f / (1f / data.selectedSong.bpm))/256;
 		AudioSource songPlayer = (AudioSource) gameObject.GetComponent<AudioSource>();
 		songPlayer.clip = data.selectedSong.song;
 		remainingSongTime = songPlayer.clip.length;
 		songPlayer.Play();
 
 		//Enable Other Components
-		shutdownTimer = 13.64f/PhotonSpeed;
+		shutdownTimer = (13.64f/2f)/PhotonSpeed;
 	}
 
 	// Update is called once per frame
@@ -50,6 +54,17 @@ public class GameManager : MonoBehaviour {
 		UpdateStreakText ();
 		UpdateScoreText ();
 		UpdateMultText();
+
+		if(IsPaused)
+		{
+			PauseScreen.GetComponent<CanvasGroup>().alpha = 1;
+			Time.timeScale = 0;
+		}
+		else
+		{
+			PauseScreen.GetComponent<CanvasGroup>().alpha = 0;
+			Time.timeScale = 1;
+		}
 
 		remainingSongTime -= Time.deltaTime;
 		if(remainingSongTime <= data.selectedSong.audio_length - data.selectedSong.offset)
