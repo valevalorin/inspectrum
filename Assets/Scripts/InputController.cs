@@ -21,7 +21,7 @@ public class InputController : MonoBehaviour
 	void Start ()
 	{
 		activeColors = new List<InputColor>();
-		PM = GameObject.FindGameObjectWithTag("PhotonManager").GetComponent<PhotonManager>();
+		PM = (PhotonManager) GameObject.FindGameObjectWithTag("PhotonManager").GetComponent<PhotonManager>();
 		GM = (GameManager) GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
 	}
 	
