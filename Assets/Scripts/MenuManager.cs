@@ -8,6 +8,10 @@ using System.Linq;
 public class MenuManager : MonoBehaviour {
 	const string PATH = "Assets/Audio/";
 	const int Y_OFFSET = -30;
+
+	void Awake(){
+		Time.timeScale = 1;
+	}
 	
 	void Start(){
 		//TODO: dynamically add list of songs from Assets/Audio/
