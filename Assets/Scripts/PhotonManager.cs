@@ -55,7 +55,7 @@ public class PhotonManager : MonoBehaviour {
 		}
 
 		float num = UnityEngine.Random.value;
-		if(num > 0.0f && num <= 1.3f)
+		if(num > 0.0f && num <= 0.3f)
 			generationCooldown = 1f/BPS;
 		else if(num > 0.3f && num < 0.45f)
 		{
@@ -70,7 +70,7 @@ public class PhotonManager : MonoBehaviour {
 	{
 		float num = UnityEngine.Random.value;
 		 
-		if(num > 0.0f && num <= 1.2f)
+		if(num > 0.0f && num <= 0.2f)
 			return new PhotonData(InputColor.RED, (GameObject) Instantiate(Red, this.transform.position, Quaternion.identity));
 		else if(num > 0.2f && num <= 0.4f)
 			return new PhotonData(InputColor.BLUE, (GameObject) Instantiate(Blue, this.transform.position, Quaternion.identity));

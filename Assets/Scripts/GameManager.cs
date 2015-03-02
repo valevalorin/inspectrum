@@ -68,7 +68,10 @@ public class GameManager : MonoBehaviour {
 
 		remainingSongTime -= Time.deltaTime;
 		if(remainingSongTime <= data.selectedSong.audio_length - data.selectedSong.offset)
+		{
 			GameObject.FindGameObjectWithTag("PhotonManager").GetComponent<PhotonManager>().enabled = true;
+			GameObject.FindGameObjectWithTag("InputController").GetComponent<PhotonManager>().enabled = true;
+		}
 		if(remainingSongTime <= shutdownTimer)
 			GameObject.FindGameObjectWithTag("PhotonManager").GetComponent<PhotonManager>().enabled = false;
 	}
