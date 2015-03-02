@@ -4,7 +4,7 @@ using System.Collections;
 public class GameData : MonoBehaviour {
 
 	public static GameData Instance{
-		get{ return Instance; }
+		get{ return instance; }
 		set{}
 	}
 
@@ -27,9 +27,9 @@ public class GameData : MonoBehaviour {
 	void Awake(){
 		if(instance == null){
 			instance = this;
-			DontDestroyOnLoad(transform.gameObject);
+			DontDestroyOnLoad(this.gameObject);
 		}else{
-			DestroyImmediate(this);
+			DestroyImmediate(this.gameObject);
 		}
 	}
 }

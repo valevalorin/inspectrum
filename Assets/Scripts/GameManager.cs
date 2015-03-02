@@ -59,11 +59,13 @@ public class GameManager : MonoBehaviour {
 		{
 			PauseScreen.GetComponent<CanvasGroup>().alpha = 1;
 			Time.timeScale = 0;
+			PauseScreen.SetActive(true);
 		}
 		else
 		{
 			PauseScreen.GetComponent<CanvasGroup>().alpha = 0;
 			Time.timeScale = 1;
+			PauseScreen.SetActive(false);
 		}
 
 		remainingSongTime -= Time.deltaTime;

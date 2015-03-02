@@ -22,7 +22,6 @@ public class PauseButtons : MonoBehaviour {
 
 	public void QuitToMenu()
 	{
-		GameObject.Destroy(GM.data.gameObject);
 		Application.LoadLevel(0);
 	}
 
