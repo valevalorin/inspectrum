@@ -107,14 +107,14 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void UpdateScoreText(){
-		scoreText.text = string.Format("{0:0000000}", data.score);
+		scoreText.text = string.Format("{0:000000}", data.score);
 	}
 
 	void pauseGame(){
 		PauseScreen.SetActive(true);
 		PauseScreen.GetComponent<CanvasGroup>().alpha = 1;
 		Time.timeScale = 0;
-		GameObject.Find ("pauseScore").GetComponent<Text> ().text = string.Format("{0:0000000}", data.score);
+		GameObject.Find ("pauseScore").GetComponent<Text> ().text = string.Format("{0:000000}", data.score);
 		UpdateScoreText();
 		songPlayer.Pause();
 	}
