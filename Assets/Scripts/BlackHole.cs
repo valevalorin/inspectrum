@@ -9,6 +9,7 @@ public class BlackHole : MonoBehaviour {
 	void OnTriggerStay2D(Collider2D other){
 		if(other.gameObject.transform.position.x <= this.gameObject.transform.position.x){
 			other.gameObject.rigidbody2D.velocity = ZERO_VELOCITY;
+			other.gameObject.collider2D.enabled = false;
 			StartCoroutine (ShrinkTransform (other.gameObject.transform));
 
 			//Add particle system explosion cycle
