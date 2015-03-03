@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour {
 	public bool IsPaused = false;
 	public GameObject PauseScreen;
 
+	AudioSource songPlayer;
+
 	void Awake(){
 		data = GameObject.Find ("GameData").GetComponent<GameData> ();
 		data.score = 0;
@@ -33,14 +35,13 @@ public class GameManager : MonoBehaviour {
 		scoreText = GameObject.Find ("score").GetComponent<Text> ();
 		multiplierText = GameObject.Find ("multiplier").GetComponentsInChildren<Text>();
 		streakText = GameObject.Find ("hit_counter").GetComponent<Text> ();
-
+		songPlayer = (AudioSource) gameObject.GetComponent<AudioSource>();
 		multiplierText [2].color = Color.red;
 	}
 
 	// Use this for initialization
 	void Start () {
 		PhotonSpeed = -13.64f/2;//(-15.5f / (1f / data.selectedSong.bpm))/256;
-		AudioSource songPlayer = (AudioSource) gameObject.GetComponent<AudioSource>();
 		songPlayer.clip = data.selectedSong.song;
 		remainingSongTime = songPlayer.clip.length;
 		songPlayer.Play();
@@ -60,12 +61,16 @@ public class GameManager : MonoBehaviour {
 			PauseScreen.GetComponent<CanvasGroup>().alpha = 1;
 			Time.timeScale = 0;
 			PauseScreen.SetActive(true);
+			songPlayer.Pause();
 		}
 		else
 		{
 			PauseScreen.GetComponent<CanvasGroup>().alpha = 0;
 			Time.timeScale = 1;
 			PauseScreen.SetActive(false);
+			if(!songPlayer.isPlaying){
+				songPlayer.Play ();
+			}
 		}
 
 		remainingSongTime -= Time.deltaTime;
