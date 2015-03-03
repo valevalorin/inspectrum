@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour {
 		streakText = GameObject.Find ("hit_counter").GetComponent<Text> ();
 		songPlayer = (AudioSource) gameObject.GetComponent<AudioSource>();
 		multiplierText [2].color = Color.red;
+
 	}
 
 	// Use this for initialization
@@ -56,26 +57,16 @@ public class GameManager : MonoBehaviour {
 		UpdateScoreText ();
 		UpdateMultText();
 
-		if(IsPaused)
-		{
-			PauseScreen.GetComponent<CanvasGroup>().alpha = 1;
-			Time.timeScale = 0;
-			PauseScreen.SetActive(true);
-			songPlayer.Pause();
-		}
-		else
-		{
-			PauseScreen.GetComponent<CanvasGroup>().alpha = 0;
-			Time.timeScale = 1;
-			PauseScreen.SetActive(false);
-			if(!songPlayer.isPlaying){
-				songPlayer.Play ();
-			}
+		Debug.Log (string.Format ("length: {0}, time: {1}",songPlayer.clip.length, songPlayer.time));
+
+		if(IsPaused){
+			pauseGame();
+		}else{
+			resumeGame();
 		}
 
 		remainingSongTime -= Time.deltaTime;
-		if(remainingSongTime <= data.selectedSong.audio_length - data.selectedSong.offset)
-		{
+		if(remainingSongTime <= data.selectedSong.audio_length - data.selectedSong.offset){
 			GameObject.FindGameObjectWithTag("PhotonManager").GetComponent<PhotonManager>().enabled = true;
 			GameObject.FindGameObjectWithTag("InputController").GetComponent<InputController>().enabled = true;
 		}
@@ -117,5 +108,23 @@ public class GameManager : MonoBehaviour {
 
 	void UpdateScoreText(){
 		scoreText.text = string.Format("{0:0000000}", data.score);
+	}
+
+	void pauseGame(){
+		PauseScreen.SetActive(true);
+		PauseScreen.GetComponent<CanvasGroup>().alpha = 1;
+		Time.timeScale = 0;
+		GameObject.Find ("pauseScore").GetComponent<Text> ().text = string.Format("{0:0000000}", data.score);
+		UpdateScoreText();
+		songPlayer.Pause();
+	}
+
+	void resumeGame(){
+		PauseScreen.SetActive(false);
+		PauseScreen.GetComponent<CanvasGroup>().alpha = 0;
+		Time.timeScale = 1;
+		if(!songPlayer.isPlaying){
+			songPlayer.Play ();
+		}
 	}
 }
