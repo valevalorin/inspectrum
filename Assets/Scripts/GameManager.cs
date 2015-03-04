@@ -59,12 +59,6 @@ public class GameManager : MonoBehaviour {
 		UpdateScoreText ();
 		UpdateMultText();
 
-		Debug.Log (string.Format ("length: {0}, time: {1}",songPlayer.clip.length, songPlayer.time));
-
-		if(Input.GetKeyDown(KeyCode.Space)){
-			songPlayer.time = songPlayer.clip.length - 3.0f;
-		}
-
 		if(IsPaused || IsGameOver){
 			pauseGame();
 		}else{
@@ -128,7 +122,7 @@ public class GameManager : MonoBehaviour {
 		GameObject.Find ("pauseScore").GetComponent<Text> ().text = string.Format("{0:000000}", data.score);
 		UpdateScoreText();
 		songPlayer.Pause();
-		if(IsGameOver){
+		if(IsGameOver && GameObject.Find ("Resume") != null){
 			GameObject.Find ("Resume").SetActive(false);
 		}
 	}
