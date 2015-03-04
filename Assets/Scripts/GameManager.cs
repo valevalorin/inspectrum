@@ -59,10 +59,6 @@ public class GameManager : MonoBehaviour {
 		UpdateScoreText ();
 		UpdateMultText();
 
-		if(Input.GetKeyDown(KeyCode.Space)){
-			songPlayer.time = songPlayer.clip.length - 30.0f;
-		}
-
 		if(IsPaused || IsGameOver){
 			pauseGame();
 		}else{
