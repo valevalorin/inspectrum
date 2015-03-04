@@ -4,6 +4,7 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
+	const float END_SONG_TIME = 2.0f; //5 seconds
 	const int PHOTON_VALUE_SCORE = 1;
 	const string EMPTY_STRING = "";
 
@@ -21,6 +22,7 @@ public class GameManager : MonoBehaviour {
 	public GameData data;
 	
 	public bool IsPaused = false;
+	private bool IsGameOver = false;
 	public GameObject PauseScreen;
 
 	AudioSource songPlayer;
@@ -59,7 +61,11 @@ public class GameManager : MonoBehaviour {
 
 		Debug.Log (string.Format ("length: {0}, time: {1}",songPlayer.clip.length, songPlayer.time));
 
-		if(IsPaused){
+		if(Input.GetKeyDown(KeyCode.Space)){
+			songPlayer.time = songPlayer.clip.length - 3.0f;
+		}
+
+		if(IsPaused || IsGameOver){
 			pauseGame();
 		}else{
 			resumeGame();
@@ -72,6 +78,11 @@ public class GameManager : MonoBehaviour {
 		}
 		if(remainingSongTime <= shutdownTimer)
 			GameObject.FindGameObjectWithTag("PhotonManager").GetComponent<PhotonManager>().enabled = false;
+
+		if((songPlayer.clip.length - songPlayer.audio.time) <= END_SONG_TIME){
+			GameObject.FindGameObjectWithTag("PhotonManager").GetComponent<PhotonManager>().enabled = false;
+			IsGameOver = true;
+		}
 	}
 
 	public void Score(){
@@ -117,6 +128,9 @@ public class GameManager : MonoBehaviour {
 		GameObject.Find ("pauseScore").GetComponent<Text> ().text = string.Format("{0:000000}", data.score);
 		UpdateScoreText();
 		songPlayer.Pause();
+		if(IsGameOver){
+			GameObject.Find ("Resume").SetActive(false);
+		}
 	}
 
 	void resumeGame(){
