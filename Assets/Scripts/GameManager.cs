@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour {
 	private Text scoreText;
 	private Text[] multiplierText;
 	private Text streakText;
+	private Text timeText;
 
 	public GameData data;
 	
@@ -37,6 +38,8 @@ public class GameManager : MonoBehaviour {
 		scoreText = GameObject.Find ("score").GetComponent<Text> ();
 		multiplierText = GameObject.Find ("multiplier").GetComponentsInChildren<Text>();
 		streakText = GameObject.Find ("hit_counter").GetComponent<Text> ();
+		timeText = GameObject.Find ("Timestamp").GetComponent<Text> ();
+
 		songPlayer = (AudioSource) gameObject.GetComponent<AudioSource>();
 		multiplierText [2].color = Color.red;
 
@@ -55,9 +58,12 @@ public class GameManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		UpdateStreakText ();
-		UpdateScoreText ();
-		UpdateMultText();
+		if(songPlayer.isPlaying){
+			UpdateStreakText ();
+			UpdateScoreText ();
+			UpdateMultText();
+			UpdateTimeText();
+		}
 
 		if(IsPaused || IsGameOver){
 			pauseGame();
@@ -112,6 +118,19 @@ public class GameManager : MonoBehaviour {
 
 	void UpdateScoreText(){
 		scoreText.text = string.Format("{0:000000}", data.score);
+	}
+
+	void UpdateTimeText(){
+		float totalTime = songPlayer.clip.length;
+		float currTime = songPlayer.time;
+
+		timeText.text = string.Format ("{0} / {1}", convertFloatToTime (currTime), convertFloatToTime (totalTime));
+	}
+
+	public string convertFloatToTime(float value){
+		int minute = (int)value / 60;
+		int seconds = (int)value % 60;
+		return string.Format ("{0:00}:{1:00}", minute, seconds);
 	}
 
 	void pauseGame(){
