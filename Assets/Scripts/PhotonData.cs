@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+/**
+ * Class that defines the photon identity and color
+ **/
+using UnityEngine;
 using System.Collections;
 
 public class PhotonData{

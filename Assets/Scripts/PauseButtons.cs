@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿/**
+ * Class that contains functions for Pause menu interactions
+ **/
+using UnityEngine;
 using System.Collections;
 
 public class PauseButtons : MonoBehaviour {

@@ -57,7 +57,6 @@ public class InputController : MonoBehaviour
 		//First check if the current photon is past the entry zone; if it is count it as a miss
 		if(distance > entryZoneEnd)
 		{
-			Debug.Log ("MISS!: "+distance);
 			currentPhoton.self.tag = "DeadPhoton";
 			GM.Miss();
 			PM.PhotonQueue.Dequeue();
@@ -91,7 +90,6 @@ public class InputController : MonoBehaviour
 			//If photon is inside the entry zone and the right color, score hit
 			if(distance > entryZoneBegin && distance <= entryZoneEnd && input == currentPhoton.color)
 			{
-				Debug.Log ("HIT!");
 				GM.Score();
 
 				//Change velocity to save photon from blackhole and dequeue them.
@@ -102,7 +100,6 @@ public class InputController : MonoBehaviour
 			else if((distance < entryZoneBegin && distance > (entryZoneBegin - 1.3)) || (distance > entryZoneBegin && distance <= entryZoneEnd && input != currentPhoton.color))
 			{
 				//If photon is partially but not fully in the zone OR in the zone and the wrong color score miss
-				Debug.Log ("MISS!: "+distance);
 				currentPhoton.self.tag = "DeadPhoton"; //Used to make sure the photon isn't counted for other interactions
 				GM.Miss();
 				PM.PhotonQueue.Dequeue(); //Dequeue
@@ -151,6 +148,7 @@ public class InputController : MonoBehaviour
 	}
 }
 
+//ENUM to represent colors (since Color does not support colors we need)
 public enum InputColor
 {
 	RED,

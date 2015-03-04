@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿/**
+ * Handle all misses with triggers
+ **/
+using UnityEngine;
 using System.Collections;
 
 public class MissTrigger : MonoBehaviour {
@@ -11,7 +14,7 @@ public class MissTrigger : MonoBehaviour {
 		PM = (PhotonManager) GameObject.FindGameObjectWithTag("PhotonManager").GetComponent<PhotonManager>();
 		GM = (GameManager) GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
 	}
-
+	
 	void OnTriggerExit2D(Collider2D other)
 	{
 		if(!other.CompareTag("DeadPhoton"))

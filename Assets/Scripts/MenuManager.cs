@@ -1,42 +1,39 @@
-﻿using UnityEngine;
+﻿/**
+ * Manager that will manage the Menu.scene
+ **/
+using UnityEngine;
 using System.Collections;
 
 using UnityEngine.UI;
 using System.IO;
 using System.Linq;
 
-public class MenuManager : MonoBehaviour {
-	const string PATH = "Assets/Audio/";
-	const int Y_OFFSET = -30;
-
-	void Awake(){
+public class MenuManager : MonoBehaviour
+{
+	void Awake()
+	{
+		//When returning from Demo.Scene, reset the timeScale to 1; from pause menu
 		Time.timeScale = 1;
 	}
-	
-	void Start(){
-		//TODO: dynamically add list of songs from Assets/Audio/
-//		DirectoryInfo dir = new DirectoryInfo (PATH);
-//		FileInfo[] files = dir.GetFiles ();
-//		
-//		foreach(FileInfo file in files){
-//			if(!file.Name.Contains(".meta")){
-//				
-//			}
-//		}
-	}
 
-	public void StartGame(){
+	public void StartGame()
+	{
+		//Determine which song was selected
 		GameData data = GameObject.Find ("GameData").GetComponent<GameData> ();
 		Toggle active = GameObject.Find ("SongList").GetComponent<ToggleGroup> ().ActiveToggles ().FirstOrDefault ();
 		data.selectedSong = active.GetComponent<SongData> ();
 		Application.LoadLevel (Application.loadedLevel + 1);
 	}
 
-	public void ExitGame(){
+	//function to Exit.Scene
+	public void ExitGame()
+	{
 		Application.Quit ();
 	}
 
-	public void LoadScene(int sceneId){
+	//Function to transistion between scenes based on ID
+	public void LoadScene(int sceneId)
+	{
 		Application.LoadLevel(sceneId);
 	}
 }

@@ -1,14 +1,14 @@
-﻿using UnityEngine;
+﻿/**
+ * SongData class
+ * 	information representing a song
+ **/
+using UnityEngine;
 using System.Collections;
 
-public class SongData : MonoBehaviour {
+public class SongData : MonoBehaviour 
+{
 	public AudioClip song;
 	public string title;
 	public float bpm;
 	public float offset;
-	public float audio_length{
-		get{
-			return this.song.length;
-		}
-	}
 }
